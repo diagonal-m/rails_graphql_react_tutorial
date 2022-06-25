@@ -1,14 +1,18 @@
 module Mutations
   class CreateBook < BaseMutation
-    # TODO: define return fields
-    # field :post, Types::PostType, null: false
+    graphql_name 'CreateBook'
 
-    # TODO: define arguments
-    # argument :name, String, required: true
+    field :book, Types::BookType, null: true
+    field :result, Boolean, null: true
 
-    # TODO: define resolve method
-    # def resolve(name:)
-    #   { post: ... }
-    # end
+    argument :title, String, required: false
+
+    def resolve(title:)
+      book = Book.create(title: title)
+      {
+        book: book,
+        result: book.errors.blank?
+      }
+    end
   end
 end
